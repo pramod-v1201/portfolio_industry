@@ -1,0 +1,2216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dr. Pramod Vishwakarma - Assistant Professor, Computer Science & Engineering">
+    <title>Dr. Pramod Vishwakarma | Academic Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --color-primary: #0A192F;
+            --color-secondary: #112240;
+            --color-tertiary: #1E3A5F;
+            --color-accent: #64FFDA;
+            --color-accent-dark: #00D9B5;
+            --color-text-primary: #E6F1FF;
+            --color-text-secondary: #8892B0;
+            
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            --spacing-3xl: 4rem;
+            
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Open Sans', sans-serif;
+            --font-accent: 'Roboto Mono', monospace;
+            
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4);
+            --shadow-glow: 0 0 30px rgba(100, 255, 218, 0.3);
+            
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background-color: var(--color-primary);
+            color: var(--color-text-primary);
+            line-height: 1.6;
+            font-size: 16px;
+            overflow-x: hidden;
+        }
+
+        /*BACKGROUND ANIMATION*/
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .gradient-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, 
+                #0A192F 0%, 
+                #112240 25%, 
+                #1E3A5F 50%, 
+                #112240 75%, 
+                #0A192F 100%);
+            background-size: 400% 400%;
+            animation: gradient-shift 20s ease infinite;
+        }
+
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .particle-field {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .particle {
+            position: absolute;
+            background-color: rgba(100, 255, 218, 0.5);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            animation: particle-float 15s infinite linear;
+        }
+
+        @keyframes particle-float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.7;
+            }
+            90% {
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(-100px) translateX(20px);
+                opacity: 0;
+            }
+        }
+
+        /* FADE IN/OUT ANIMATIONS */
+        section {
+            padding: var(--spacing-3xl) 0;
+            position: relative;
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .skill-category, .publication-card, .education-card, .timeline-item, .achievement-card, .certification-card {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .skill-category.visible, .publication-card.visible, 
+        .education-card.visible, .timeline-item.visible,
+        .achievement-card.visible, .certification-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-lg);
+        }
+
+        /* Navigation Bar*/
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+            z-index: 1000;
+            padding: var(--spacing-sm) 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .nav-brand {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            text-decoration: none;
+            font-family: var(--font-heading);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            white-space: nowrap;
+        }
+
+        .nav-brand::before {
+            content: "◉";
+            font-size: 0.875rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--spacing-md);
+            list-style: none;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .nav-links a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            transition: color var(--transition-fast);
+            position: relative;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            white-space: nowrap;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--color-accent);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-accent);
+            transition: width var(--transition-fast);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        /* Mobile Navigation */
+        .mobile-nav-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--color-accent);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding-top: 80px;
+            padding-bottom: var(--spacing-3xl);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            background: radial-gradient(ellipse at top, rgba(100, 255, 218, 0.05) 0%, transparent 50%);
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-3xl);
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-md);
+            line-height: 1.1;
+            font-family: var(--font-heading);
+        }
+
+        .hero-text .subtitle {
+            font-size: 1.25rem;
+            color: var(--color-accent);
+            font-weight: 500;
+            margin-bottom: var(--spacing-lg);
+            font-family: var(--font-accent);
+        }
+
+        .hero-text p {
+            font-size: 1.125rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.8;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-2xl);
+        }
+
+        .btn {
+            padding: var(--spacing-md) var(--spacing-xl);
+            border-radius: 6px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-family: var(--font-body);
+        }
+
+        .btn-primary {
+            background: var(--color-accent);
+            color: var(--color-primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--color-accent-dark);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--color-accent);
+            border: 2px solid var(--color-accent);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(100, 255, 218, 0.1);
+            transform: translateY(-3px);
+        }
+
+        .hero-visual {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #globe-container {
+            width: 100%;
+            height: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: grab;
+        }
+
+        #globe-container:active {
+            cursor: grabbing;
+        }
+
+        /* Sections */
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-2xl);
+            position: relative;
+            padding-bottom: var(--spacing-lg);
+            font-family: var(--font-heading);
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: var(--color-accent);
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        #about {
+            background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: var(--spacing-3xl);
+            align-items: start;
+        }
+
+        .about-image {
+            position: relative;
+            height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform var(--transition-base);
+            display: block;
+        }
+
+        .profile-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--color-primary);
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-placeholder::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+
+        .about-text p {
+            margin-bottom: var(--spacing-lg);
+            color: var(--color-text-secondary);
+            line-height: 1.8;
+            font-size: 1.125rem;
+        }
+
+        .about-highlights {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-lg);
+            margin-top: var(--spacing-xl);
+        }
+
+        .highlight-card {
+            background: rgba(30, 58, 95, 0.4);
+            padding: var(--spacing-lg);
+            border-radius: 8px;
+            border-left: 4px solid var(--color-accent);
+            transition: all var(--transition-base);
+        }
+
+        .highlight-card:hover {
+            transform: translateX(8px);
+            background: rgba(30, 58, 95, 0.6);
+            box-shadow: var(--shadow-md);
+        }
+
+        .highlight-card h3 {
+            color: var(--color-accent);
+            margin-bottom: var(--spacing-sm);
+            font-size: 1.25rem;
+            font-family: var(--font-heading);
+        }
+
+        .highlight-card p {
+            color: var(--color-text-secondary);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        /* Skills Section */
+        #skills {
+            background-color: var(--color-secondary);
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-xl);
+        }
+
+        .skill-category {
+            background: rgba(30, 58, 95, 0.4);
+            padding: var(--spacing-xl);
+            border-radius: 12px;
+            border-top: 3px solid var(--color-accent);
+            transition: all var(--transition-base);
+        }
+
+        .skill-category:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            background: rgba(30, 58, 95, 0.6);
+        }
+
+        .skill-category h3 {
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-md);
+            font-size: 1.25rem;
+            font-family: var(--font-heading);
+        }
+
+        .skill-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+        }
+
+        .skill-tag {
+            background: rgba(100, 255, 218, 0.1);
+            color: var(--color-accent);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            transition: all var(--transition-fast);
+            font-family: var(--font-accent);
+        }
+
+        .skill-tag:hover {
+            background: var(--color-accent);
+            color: var(--color-primary);
+            transform: translateY(-2px);
+        }
+
+        /* Experience Section */
+        #experience {
+            background: linear-gradient(180deg, var(--color-secondary) 0%, var(--color-primary) 100%);
+        }
+
+        .timeline {
+            position: relative;
+            padding: var(--spacing-lg) 0 var(--spacing-lg) var(--spacing-2xl);
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--color-accent), transparent);
+        }
+
+        .timeline-item {
+            margin-bottom: var(--spacing-3xl);
+            padding-left: var(--spacing-xl);
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 8px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--color-accent);
+            border: 4px solid var(--color-primary);
+            box-shadow: 0 0 0 4px rgba(100, 255, 218, 0.2);
+        }
+
+        .timeline-date {
+            font-size: 0.875rem;
+            color: var(--color-accent);
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            font-family: var(--font-accent);
+        }
+
+        .timeline-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-sm);
+            font-family: var(--font-heading);
+        }
+
+        .timeline-company {
+            font-size: 1rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-md);
+            font-weight: 500;
+        }
+
+        .timeline-description {
+            color: var(--color-text-secondary);
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+
+        /* Publications Section */
+        #publications {
+            background-color: var(--color-primary);
+        }
+
+        .publications-container {
+            position: relative;
+        }
+
+        .publication-type-section {
+            margin-bottom: var(--spacing-3xl);
+        }
+
+        .publication-section-title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-xl);
+            position: relative;
+            padding-bottom: var(--spacing-md);
+            font-family: var(--font-heading);
+        }
+
+        .publication-section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--color-accent);
+            border-radius: 2px;
+        }
+
+        .publications-scroll-wrapper {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: var(--spacing-lg) 0;
+            margin: 0 -var(--spacing-lg);
+            padding-left: var(--spacing-lg);
+            scrollbar-width: thin;
+            scrollbar-color: var(--color-accent) var(--color-secondary);
+        }
+
+        .publications-scroll-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .publications-scroll-wrapper::-webkit-scrollbar-track {
+            background: var(--color-secondary);
+            border-radius: 4px;
+        }
+
+        .publications-scroll-wrapper::-webkit-scrollbar-thumb {
+            background: var(--color-accent);
+            border-radius: 4px;
+        }
+
+        .publications-grid {
+            display: flex;
+            gap: var(--spacing-xl);
+            padding-bottom: var(--spacing-md);
+        }
+
+        .publication-card {
+            background: rgba(30, 58, 95, 0.4);
+            padding: var(--spacing-xl);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            min-width: 380px;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            transition: all var(--transition-base);
+            cursor: pointer;
+        }
+
+        .publication-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+            border-color: var(--color-accent);
+            background: rgba(30, 58, 95, 0.6);
+        }
+
+        .publication-year {
+            font-size: 0.75rem;
+            color: var(--color-accent);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: var(--spacing-md);
+            font-family: var(--font-accent);
+        }
+
+        .publication-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-md);
+            line-height: 1.4;
+            font-family: var(--font-heading);
+            flex-grow: 1;
+        }
+
+        .publication-venue {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-lg);
+            line-height: 1.6;
+        }
+
+        .publication-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .publication-type {
+            display: inline-block;
+            background: rgba(100, 255, 218, 0.1);
+            color: var(--color-accent);
+            padding: var(--spacing-xs) var(--spacing-md);
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            font-family: var(--font-accent);
+        }
+
+        .publication-link {
+            color: var(--color-accent);
+            font-size: 1.25rem;
+            transition: all var(--transition-fast);
+        }
+
+        .publication-link:hover {
+            color: var(--color-accent-dark);
+            transform: scale(1.2);
+        }
+
+        .scroll-buttons {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            margin-top: var(--spacing-xl);
+        }
+
+        .scroll-btn {
+            background: rgba(100, 255, 218, 0.1);
+            border: 2px solid var(--color-accent);
+            color: var(--color-accent);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            font-size: 1.25rem;
+        }
+
+        .scroll-btn:hover {
+            background: var(--color-accent);
+            color: var(--color-primary);
+            transform: scale(1.1);
+        }
+
+        .scroll-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+        }
+
+        /* Education Section */
+        #education {
+            background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+        }
+
+        .education-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--spacing-xl);
+        }
+
+        .education-card {
+            background: rgba(30, 58, 95, 0.4);
+            padding: var(--spacing-xl);
+            border-radius: 12px;
+            border-left: 4px solid var(--color-accent);
+            transition: all var(--transition-base);
+        }
+
+        .education-card:hover {
+            transform: translateX(8px);
+            background: rgba(30, 58, 95, 0.6);
+            box-shadow: var(--shadow-md);
+        }
+
+        .education-degree {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-accent);
+            margin-bottom: var(--spacing-sm);
+            font-family: var(--font-heading);
+            line-height: 1.3;
+        }
+
+        .education-institution {
+            font-size: 1rem;
+            color: var(--color-text-primary);
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .education-year {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+        }
+
+        /* Achievements Section */
+        #achievements {
+            background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+        }
+        
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-xl);
+        }
+        
+        .achievement-card {
+            background: rgba(30, 58, 95, 0.4);
+            padding: var(--spacing-xl);
+            border-radius: 12px;
+            border-top: 3px solid var(--color-accent);
+            transition: all var(--transition-base);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        
+        .achievement-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            background: rgba(30, 58, 95, 0.6);
+        }
+        
+        .achievement-icon {
+            font-size: 2.5rem;
+            color: var(--color-accent);
+            margin-bottom: var(--spacing-md);
+            text-align: center;
+        }
+        
+        .achievement-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-sm);
+            font-family: var(--font-heading);
+            line-height: 1.3;
+        }
+        
+        .achievement-description {
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+
+        /* Certifications Section - Fixed Size Cards */
+        #certifications {
+            background-color: var(--color-secondary);
+        }
+        
+        .certifications-container {
+            position: relative;
+        }
+        
+        .certifications-scroll-wrapper {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: var(--spacing-lg) 0;
+            margin: 0 -var(--spacing-lg);
+            padding-left: var(--spacing-lg);
+            scrollbar-width: thin;
+            scrollbar-color: var(--color-accent) var(--color-secondary);
+        }
+        
+        .certifications-scroll-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .certifications-scroll-wrapper::-webkit-scrollbar-track {
+            background: var(--color-secondary);
+            border-radius: 4px;
+        }
+        
+        .certifications-scroll-wrapper::-webkit-scrollbar-thumb {
+            background: var(--color-accent);
+            border-radius: 4px;
+        }
+        
+        .certifications-grid {
+            display: flex;
+            gap: var(--spacing-xl);
+            padding-bottom: var(--spacing-md);
+        }
+        
+        .certification-card {
+            background: rgba(30, 58, 95, 0.4);
+            padding: var(--spacing-xl);
+            border-radius: 12px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            min-width: 380px;
+            max-width: 380px;
+            display: flex;
+            flex-direction: column;
+            transition: all var(--transition-base);
+            cursor: pointer;
+            height: 240px; /* Fixed height for consistency */
+        }
+        
+        .certification-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+            border-color: var(--color-accent);
+            background: rgba(30, 58, 95, 0.6);
+        }
+        
+        .certification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .certification-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            line-height: 1.4;
+            flex-grow: 1;
+            margin-right: var(--spacing-md);
+        }
+        
+        .certification-badge {
+            background: rgba(100, 255, 218, 0.1);
+            color: var(--color-accent);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            font-family: var(--font-accent);
+            white-space: nowrap;
+        }
+        
+        .certification-provider {
+            font-size: 0.875rem;
+            color: var(--color-accent);
+            margin-bottom: var(--spacing-sm);
+            font-weight: 500;
+        }
+        
+        .certification-date {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        .certification-link {
+            color: var(--color-accent);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            transition: color var(--transition-fast);
+            margin-top: auto;
+        }
+        
+        .certification-link:hover {
+            color: var(--color-accent-dark);
+        }
+
+        /* Contact Section */
+        #contact {
+            background-color: var(--color-secondary);
+        }
+
+        .contact-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .contact-info h3 {
+            font-size: 1.5rem;
+            color: var(--color-text-primary);
+            margin-bottom: var(--spacing-xl);
+            font-family: var(--font-heading);
+            text-align: center;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .contact-item {
+            background: rgba(30, 58, 95, 0.4);
+            padding: var(--spacing-xl);
+            border-radius: 12px;
+            text-align: center;
+            transition: all var(--transition-base);
+            border: 1px solid rgba(100, 255, 218, 0.1);
+        }
+
+        .contact-item:hover {
+            transform: translateY(-8px);
+            background: rgba(30, 58, 95, 0.6);
+            border-color: var(--color-accent);
+            box-shadow: var(--shadow-md);
+        }
+
+        .contact-icon {
+            font-size: 2rem;
+            color: var(--color-accent);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .contact-label {
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: var(--spacing-sm);
+            font-family: var(--font-accent);
+        }
+
+        .contact-value {
+            font-size: 1rem;
+            color: var(--color-text-primary);
+            word-break: break-word;
+        }
+
+        .contact-value a {
+            color: var(--color-accent);
+            text-decoration: none;
+            transition: color var(--transition-fast);
+        }
+
+        .contact-value a:hover {
+            color: var(--color-accent-dark);
+        }
+
+        .social-links {
+            display: flex;
+            gap: var(--spacing-lg);
+            justify-content: center;
+            margin-top: var(--spacing-2xl);
+        }
+
+        .social-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: rgba(100, 255, 218, 0.1);
+            border: 2px solid var(--color-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-accent);
+            text-decoration: none;
+            transition: all var(--transition-base);
+            font-size: 1.5rem;
+        }
+
+        .social-icon:hover {
+            background: var(--color-accent);
+            color: var(--color-primary);
+            transform: translateY(-8px) scale(1.1);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--color-primary);
+            color: var(--color-text-secondary);
+            padding: var(--spacing-2xl) 0;
+            text-align: center;
+            border-top: 1px solid rgba(100, 255, 218, 0.1);
+        }
+
+        footer p {
+            font-size: 0.875rem;
+        }
+
+        footer a {
+            color: var(--color-accent);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: var(--color-accent-dark);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .nav-links {
+                gap: var(--spacing-sm);
+            }
+            
+            .nav-links a {
+                font-size: 0.75rem;
+                padding: var(--spacing-xs);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-text h1 {
+                font-size: 2rem;
+            }
+
+            .hero-visual {
+                height: 350px;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .about-highlights {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .publication-card, .certification-card {
+                min-width: 320px;
+                max-width: 320px;
+            }
+            
+            .certification-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .certification-title {
+                margin-right: 0;
+                margin-bottom: var(--spacing-sm);
+            }
+            
+            /* Mobile Navigation */
+            .mobile-nav-toggle {
+                display: block;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: rgba(10, 25, 47, 0.95);
+                backdrop-filter: blur(12px);
+                flex-direction: column;
+                padding: var(--spacing-lg);
+                gap: var(--spacing-md);
+                transform: translateY(-100%);
+                opacity: 0;
+                transition: all var(--transition-base);
+                z-index: 999;
+            }
+            
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            
+            .nav-links a {
+                font-size: 1rem;
+                padding: var(--spacing-sm) var(--spacing-md);
+                text-align: center;
+                border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+            }
+            
+            .nav-links a:last-child {
+                border-bottom: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="background-animation">
+        <div class="gradient-bg"></div>
+        <div class="particle-field" id="particleField"></div>
+    </div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="#home" class="nav-brand">Dr. Pramod Vishwakarma</a>
+            <button class="mobile-nav-toggle" id="mobileNavToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" class="nav-link active">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#experience" class="nav-link">Experience</a></li>
+                <li><a href="#publications" class="nav-link">Publications</a></li>
+                <li><a href="#education" class="nav-link">Education</a></li>
+                <li><a href="#achievements" class="nav-link">Achievements</a></li>
+                <li><a href="#certifications" class="nav-link">Certifications</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1 class="animate-on-scroll">Dr. Pramod Vishwakarma</h1>
+                    <p class="subtitle animate-on-scroll">Assistant Professor, Computer Science & Engineering</p>
+                    <p class="animate-on-scroll">Advancing education through research, innovation, and industry-oriented teaching. Specializing in cybersecurity, machine learning, and emerging technologies.</p>
+                    <div class="hero-cta">
+                        <a href="#contact" class="btn btn-primary animate-on-scroll">
+                            <i class="fas fa-envelope"></i> Get in Touch
+                        </a>
+                        <a href="https://scholar.google.com/citations?user=DLqHUf0AAAAJ&hl=en" target="_blank" class="btn btn-secondary animate-on-scroll">
+                            <i class="fas fa-graduation-cap"></i> View Research
+                        </a>
+                    </div>
+                </div>
+                <div class="hero-visual">
+                    <div id="globe-container"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">About</h2>
+            <div class="about-grid">
+                <div class="about-image animate-on-scroll">
+                    <!-- Fixed profile image with fallback -->
+                    <div class="profile-placeholder">
+                        <img src="images/profile.jpg" alt="Dr. Pramod Vishwakarma" class="profile-pic" onerror="this.style.display='none'">
+                    </div>
+                </div>
+                <div class="about-text">
+                    <p class="animate-on-scroll">Dr. Pramod Vishwakarma is an accomplished academic and researcher with over 16 years of professional experience spanning academia, EduTech, and technical training. 
+
+Throughout his career, Dr. Vishwakarma has been actively involved in the design and delivery of specialized training programs for a diverse audience, including corporate professionals, university students, and government employees—most notably with the State Bank of India (SBI).
+</p>
+                    <p class="animate-on-scroll">
+He has authored and published 25 research papers and one book chapter in reputed national and international journals and conferences, including those by IEEE and Springer. Additionally, he holds one patent and has authored two books in the field of Data Science.
+
+His research and teaching interests includes Data Science, Deep Learning, Cybersecurity, and Image Processing, with a strong focus on MATLAB and Python-based implementations..</p>
+                    <div class="about-highlights">
+                        <div class="highlight-card animate-on-scroll">
+                            <h3>16+ Years</h3>
+                            <p>Teaching & Research Experience</p>
+                        </div>
+                        <div class="highlight-card animate-on-scroll">
+                            <h3>25+ Publications</h3>
+                            <p>International Journals & Conferences</p>
+                        </div>
+                        <div class="highlight-card animate-on-scroll">
+                            <h3>PhD in CSE</h3>
+                            <p>Chandigarh University, 2024</p>
+                        </div>
+                        <div class="highlight-card animate-on-scroll">
+                            <h3>Industry Focused</h3>
+                            <p>Cybersecurity, AI & Emerging Tech</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Technical Proficiency</h2>
+            <div class="skills-grid">
+                <div class="skill-category animate-on-scroll">
+                    <h3>Programming Languages</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">Java</span>
+                        <span class="skill-tag">C++</span>
+                        <span class="skill-tag">C</span>
+                    </div>
+                </div>
+                <div class="skill-category animate-on-scroll">
+                    <h3>Databases & Big Data</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">MySQL</span>
+                        <span class="skill-tag">Oracle SQL</span>
+                        <span class="skill-tag">MongoDB</span>
+                        <span class="skill-tag">Hadoop</span>
+                        <span class="skill-tag">Spark</span>
+                    </div>
+                </div>
+                <div class="skill-category animate-on-scroll">
+                    <h3>Specializations</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">Cybersecurity</span>
+                        <span class="skill-tag">Machine Learning</span>
+                        <span class="skill-tag">Deep Learning</span>
+                        <span class="skill-tag">IoT</span>
+                        <span class="skill-tag">Blockchain</span>
+                    </div>
+                </div>
+                <div class="skill-category animate-on-scroll">
+                    <h3>Tools & Platforms</h3>
+                    <div class="skill-list">
+                        <span class="skill-tag">MATLAB</span>
+                        <span class="skill-tag">Power BI</span>
+                        <span class="skill-tag">Tableau</span>
+                        <span class="skill-tag">Linux</span>
+                        <span class="skill-tag">Windows</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="experience">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Professional Experience</h2>
+            <div class="timeline">
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-date">Jun 2020 – Present</div>
+                    <div class="timeline-title">Assistant Professor</div>
+                    <div class="timeline-company">Chandigarh University, India</div>
+                    <div class="timeline-description">
+                        Teaching core and specialized subjects including Machine Learning, Python Programming, Computer Networks, Operating Systems, and Information Security. Serving as Industrial Training Coordinator and Alumni Coordinator. Leading initiatives to enhance industry readiness of students.
+                    </div>
+                </div>
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-date">Jul 2015 – Jun 2020</div>
+                    <div class="timeline-title">Senior Faculty & Mentor (Head) – IT</div>
+                    <div class="timeline-company">i-Nurture Education Solutions Pvt. Ltd.</div>
+                    <div class="timeline-description">
+                        Managed specialized engineering courses and content curation for B.Tech and BCA programs. Oversaw faculty development, industry engagement, and placement initiatives. Collaborated with university leadership to enhance academic quality and student industry readiness.
+                    </div>
+                </div>
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-date">Mar 2013 – Jul 2015</div>
+                    <div class="timeline-title">Assistant Professor</div>
+                    <div class="timeline-company">Roorkee Engineering & Management Technology Institute</div>
+                    <div class="timeline-description">
+                        Taught programming languages and technical subjects. Organized workshops and seminars on cybersecurity and related concepts. Served as Placement Coordinator, supporting student career development.
+                    </div>
+                </div>
+                <div class="timeline-item animate-on-scroll">
+                    <div class="timeline-date">Jul 2007 – Jul 2010</div>
+                    <div class="timeline-title">Faculty – IT</div>
+                    <div class="timeline-company">NIELIT, Gorakhpur</div>
+                    <div class="timeline-description">
+                        Taught various programming languages and conducted summer training programs for students on C, C++, Java, and related technologies.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="publications">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Research Publications</h2>
+            <div class="publications-container">
+                <!-- Journal Publications Section -->
+                <div class="publication-type-section">
+                    <h3 class="publication-section-title animate-on-scroll">Journal Publications</h3>
+                    <div class="publications-scroll-wrapper" id="journalsScroll">
+                        <div class="publications-grid">
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://link.springer.com/article/10.1007/s42979-024-02944-9')">
+                                <div class="publication-year">2024</div>
+                                <div class="publication-title">Design and Augmentation of a Deep Learning Based Vehicle Detection Model for Low Light Intensity Conditions</div>
+                                <div class="publication-venue">SN Computer Science, 5(5), 605</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Journal</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://www.taylorfrancis.com/chapters/edit/10.1201/9781032700502-8/revealing-non-linear-trends-weather-data-regression-analysis-approach-gurwinder-singh-anil-sharma-pramod-vishwakarma-manoj-gaur')">
+                                <div class="publication-year">2024</div>
+                                <div class="publication-title">Revealing non-linear trends and patterns in weather data through regression analysis approach</div>
+                                <div class="publication-venue">Artificial Intelligence and Information Technologies, Pages: 50-56</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Journal</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://www.sciencedirect.com/science/article/abs/pii/S1387700323001521')">
+                                <div class="publication-year">2023</div>
+                                <div class="publication-title">A comparative study of band gap engineered in-situ and ex-situ MWCNTs/TiO2 heterostructures for their enhanced photocatalytic activity under visible light</div>
+                                <div class="publication-venue">Inorganic Chemistry Communications , Pages: 110540</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Journal</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://academic.oup.com/ooms/article/3/1/itad012/7225863')">
+                                <div class="publication-year">2023</div>
+                                <div class="publication-title">Reusable and thermostable multiwalled carbon nanotubes membrane for efficient removal of benz [α] anthracene from cigarette smoke</div>
+                                <div class="publication-venue">Oxford Open Materials Science , Pages: itad012</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Journal</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://watermark02.silverchair.com/itad009.pdf?token=AQECAHi208BE49Ooan9kkhW_Ercy7Dm3ZL_9Cf3qfKAc485ysgAAA1MwggNPBgkqhkiG9w0BBwagggNAMIIDPAIBADCCAzUGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM3BE_OzzMsTM90AjQAgEQgIIDBmYu5Ena8vKlWgpmLmDk4ky4IkVRTsU6Z8y2Zif7FeVIZiUHyDvnn9luNlVy-a5ZunXwGKSDyw5Q0JpHUK2aAuXocIdYowDEZq5czcEATFSN4g1sSKBwp-yUkIiwskbWdhRG0TiU_sxP_AZW0AwlZ2-Y_IBL1GjIadIZ8zqpM6jJCtm0ns7Nt3AmGY9Ec20HVURzMJOhzvb1hpE3JPlgnJ23mLEsnJU-kYoju_rY29Lez2ZwH7jOYa88cuMKpHP2YDlUvIcLZX2QKCixs0YCzla1-7xazqbPwUmEwdA9ZyLHCpG5Db0zu1Q7fg4tRT-hmVatmLWcEVDW0pifY4KU4W29UAjl8BPmY-Xgrggy4vhhA5ruji_Qe4R9psnI0XYdoISa8KOVY7K4YGRL-4W3sIGBRMb6sgRXWdzRjEnCYpZk4DJ24QND_ReOyIRfozIlswVk_DBKldJuYWL-B0EH6jq5QlNfeanjxL8gUKssEP5CGmY6Qrwk2wYJ9WgAEb7OP3upyPowczTqT_CbHAkmK8wZHsm9HQkRgHQ6LD_JRhZQ1eToieso52_74Fbe8oahMUCVXNBOXLaneWw2m4b2pr3uemdRY0lrC9Oy3466uNWFhfpPrs__fPVE57ktFIJMo2mrjVk-3OkWfTyC9MykiKvDakVjZeN9ttVloWJnrCzPuDVU-ursecJ2eLoyuQhWrc-fpAmfYO3mSBfPSWQY0NvRBOlKxsaGrvc5nkHR6Amvpurbcu9Sfoeii4-QbjbJSTVab6blLaQz4bk4s0UZMnrXrVlRD0uppuAvu_CtiwlMBG0RKchpmFgRhP-lVa2xVS8DE34vuo7kSwAxFp3PHwtPbseC1PSzlOh3xXDO44P_iU1_Vej4k--6FqkXkv0gSOshVrW00_p6OKmP_0-utKmkHQ1kmhkhHTcsC0plEij8EGCH0dMKdYmjWffEDW3SmSpurf806IHgMlpT9bp-ZIH6SxFm5Z6-Ecvgrai1yPGQ4fPT_9DvoHVZrvVm22g1NmTzOoFP9A')">
+                                <div class="publication-year">2023</div>
+                                <div class="publication-title">Catalyst-free biphasic orthorhombic/hexagonal tungsten oxide system with enhanced photocatalytic response under visible light</div>
+                                <div class="publication-venue">Oxford Open Materials Science , Pages: itad009</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Journal</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://pubs.acs.org/doi/abs/10.1021/acsanm.2c01468')">
+                                <div class="publication-year">2022</div>
+                                <div class="publication-title">Multiwalled Carbon Nanotube-Based Freestanding Filters for Efficient Removal of Fine Particulate Matters (PM0.3), Microplastics (MP0.3), and Bioaerosols</div>
+                                <div class="publication-venue">ACS Applied Nano Materials, Pages: 9306-9318</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Journal</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://link.springer.com/chapter/10.1007/978-981-16-6289-8_52')">
+                                <div class="publication-year">2021</div>
+                                <div class="publication-title">A Survey on Deep Learning Methods in Image Analytics</div>
+                                <div class="publication-venue">Springer Nature 1 (1), Chapter 52</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Journal</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://onlinelibrary.wiley.com/doi/abs/10.1002/9781119792109.ch2')">
+                                <div class="publication-year">2021</div>
+                                <div class="publication-title">Classification of HCI and Issues and Challenges in Smart Home HCI Implementation</div>
+                                <div class="publication-venue">Cognitive Behavior and Human Computer Interaction Based on Machine Learning Algorithm 1 , Pages: 23-62</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Journal</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scroll-buttons">
+                        <button class="scroll-btn" onclick="scrollPublications('journalsScroll', 'left')">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="scroll-btn" onclick="scrollPublications('journalsScroll', 'right')">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Conference Publications Section -->
+                <div class="publication-type-section">
+                    <h3 class="publication-section-title animate-on-scroll">Conference Publications</h3>
+                    <div class="publications-scroll-wrapper" id="conferencesScroll">
+                        <div class="publications-grid">
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://ieeexplore.ieee.org/abstract/document/10956354')">
+                                <div class="publication-year">2025</div>
+                                <div class="publication-title">Detection and Prevention from Deepfake Images Videos Using Increasing Frame Method</div>
+                                <div class="publication-venue">AUTOCOM 2025, Pages: 187-192</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Conference</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://ieeexplore.ieee.org/abstract/document/10956280')">
+                                <div class="publication-year">2025</div>
+                                <div class="publication-title">Deepfake Detection in Picture</div>
+                                <div class="publication-venue">AUTOCOM 2025, Pages: 359-363</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Conference</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://ieeexplore.ieee.org/abstract/document/10593022')">
+                                <div class="publication-year">2024</div>
+                                <div class="publication-title">Cybersecurity Challenges In Healthcare Systems</div>
+                                <div class="publication-venue">IC3SE 2024, Pages: 1-6</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Conference</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://ieeexplore.ieee.org/abstract/document/10592918')">
+                                <div class="publication-year">2024</div>
+                                <div class="publication-title">Privacy-Preserving Techniques for Data Sharing in the Era of IoT</div>
+                                <div class="publication-venue">IC3SE 2024, Pages: 1053-1058</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Conference</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://ieeexplore.ieee.org/abstract/document/10522287')">
+                                <div class="publication-year">2024</div>
+                                <div class="publication-title">Exploring the Synergy between Network Security and Blockchain Technology</div>
+                                <div class="publication-venue">ICRITO 2024, Pages: 1-6</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Conference</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://ieeexplore.ieee.org/abstract/document/10522190')">
+                                <div class="publication-year">2024</div>
+                                <div class="publication-title">Next-Generation Tele-Communication Networks and IoT: Advancements and Challenges</div>
+                                <div class="publication-venue">ICRITO 2024, Pages: 1-6</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Conference</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://ieeexplore.ieee.org/abstract/document/10369022')">
+                                <div class="publication-year">2023</div>
+                                <div class="publication-title">Optimization of natural language understanding with contextual embeddings</div>
+                                <div class="publication-venue">RMKMATE 2023, Pages: 1-6</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Conference</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://ieeexplore.ieee.org/abstract/document/10369726')">
+                                <div class="publication-year">2023</div>
+                                <div class="publication-title">Smart performance optimization of natural language processing with recursive neural networks</div>
+                                <div class="publication-venue">RMKMATE 2023, Pages: 1-7</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Conference</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://ieeexplore.ieee.org/abstract/document/10369548')">
+                                <div class="publication-year">2023</div>
+                                <div class="publication-title">Enhanced performance optimization of Network Coding for Enhancing Security and Performance in Wireless Networks</div>
+                                <div class="publication-venue">RMKMATE 2023, Pages: 1-6</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Conference</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://ieeexplore.ieee.org/abstract/document/10368665')">
+                                <div class="publication-year">2023</div>
+                                <div class="publication-title">Transfer learning for accurate classification of breast cancer in medical imaging</div>
+                                <div class="publication-venue">RMKMATE 2023, Pages: 1-6</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Conference</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://ieeexplore.ieee.org/abstract/document/10368836')">
+                                <div class="publication-year">2023</div>
+                                <div class="publication-title">Enabling Accurate Brain Tumor Segmentation with Deep Learning</div>
+                                <div class="publication-venue">RMKMATE 2023, Pages: 1-6</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Conference</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://ieeexplore.ieee.org/abstract/document/10112132')">
+                                <div class="publication-year">2023</div>
+                                <div class="publication-title">Deep learning based methods in image analytics for vehicle detection: A review</div>
+                                <div class="publication-venue">ISCON 2023, Pages: 1-6</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Conference</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://ieeexplore.ieee.org/abstract/document/10420179')">
+                                <div class="publication-year">2023</div>
+                                <div class="publication-title">Analyzing the growing factor of Financial Markets Using Sentimental Analysis Algorithms</div>
+                                <div class="publication-venue">AICERA/ICIS 2023, Pages: 1-7</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Conference</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://ieeexplore.ieee.org/abstract/document/10369381')">
+                                <div class="publication-year">2023</div>
+                                <div class="publication-title">Enhanced SMOTE strategy for handling imbalanced data in machine learning classification</div>
+                                <div class="publication-venue">RMKMATE, Pages: 1-7</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Conference</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://link.springer.com/chapter/10.1007/978-3-031-64779-6_9')">
+                                <div class="publication-year">2023</div>
+                                <div class="publication-title">Data-Driven Exploration of Pandemic's Psychological Impact and Lifestyle Changes Through Clustering Approach</div>
+                                <div class="publication-venue">ISDA 2023, Pages: 85-100</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Conference</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                            <div class="publication-card animate-on-scroll" onclick="openPublication('https://ieeexplore.ieee.org/abstract/document/9823843')">
+                                <div class="publication-year">2022</div>
+                                <div class="publication-title">A review of data analysis methodology</div>
+                                <div class="publication-venue">ICACITE 2022, Pages: 356-360</div>
+                                <div class="publication-footer">
+                                    <span class="publication-type">Conference</span>
+                                    <i class="fas fa-external-link-alt publication-link"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scroll-buttons">
+                        <button class="scroll-btn" onclick="scrollPublications('conferencesScroll', 'left')">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="scroll-btn" onclick="scrollPublications('conferencesScroll', 'right')">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="education">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Education</h2>
+            <div class="education-grid">
+                <div class="education-card animate-on-scroll">
+                    <div class="education-degree">Ph.D. in Computer Science & Engineering</div>
+                    <div class="education-institution">Chandigarh University</div>
+                    <div class="education-year">2024</div>
+                </div>
+                <div class="education-card animate-on-scroll">
+                    <div class="education-degree">M.Tech. in Computer Science & Engineering</div>
+                    <div class="education-institution">College of Engineering & Technology, Moradabad</div>
+                    <div class="education-year">2012 • 73.85%</div>
+                </div>
+                <div class="education-card animate-on-scroll">
+                    <div class="education-degree">M.Sc. in Information Technology</div>
+                    <div class="education-institution">KSOU Gorakhpur</div>
+                    <div class="education-year">2009 • 68.10%</div>
+                </div>
+                <div class="education-card animate-on-scroll">
+                    <div class="education-degree">'A' Level in Information Technology</div>
+                    <div class="education-institution">NIELIT, New Delhi</div>
+                    <div class="education-year">2007 • Grade B</div>
+                </div>
+                <div class="education-card animate-on-scroll">
+                    <div class="education-degree">'O' Level in Information Technology</div>
+                    <div class="education-institution">NIELIT, New Delhi</div>
+                    <div class="education-year">2004 • Grade B</div>
+                </div>
+                <div class="education-card animate-on-scroll">
+                    <div class="education-degree">Intermediate (Mathematics)</div>
+                    <div class="education-institution">St. Andrews Inter College, Gorakhpur</div>
+                    <div class="education-year">2001</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Achievements Section -->
+    <section id="achievements">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Achievements</h2>
+            <div class="achievements-grid">
+                <div class="achievement-card animate-on-scroll">
+                    <div class="achievement-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="achievement-title">25+ Research Publications</div>
+                    <div class="achievement-description">
+                        Published 22+ research papers in International & National Journals and Conferences, demonstrating significant contribution to the academic community.
+                    </div>
+                </div>
+                <div class="achievement-card animate-on-scroll">
+                    <div class="achievement-icon">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                    <div class="achievement-title">Academic Excellence</div>
+                    <div class="achievement-description">
+                        Secured overall third position in M.Tech. (CSE) program and achieved 'S' Grade (>85%) in C Language and 'A' Grade (>=80% & <85%) in C++ in NIELIT examinations.
+                    </div>
+                </div>
+                <div class="achievement-card animate-on-scroll">
+                    <div class="achievement-icon">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                    </div>
+                    <div class="achievement-title">Conference Participation</div>
+                    <div class="achievement-description">
+                        Participated in 9 International & National Conferences, presenting research papers and staying updated with the latest developments in the field.
+                    </div>
+                </div>
+                <div class="achievement-card animate-on-scroll">
+                    <div class="achievement-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <div class="achievement-title">Professional Development</div>
+                    <div class="achievement-description">
+                        Completed multiple FDP programs from reputed institutions including NITTTR, IITs & NSDC, enhancing teaching and research capabilities.
+                    </div>
+                </div>
+                <div class="achievement-card animate-on-scroll">
+                    <div class="achievement-icon">
+                        <i class="fas fa-user-tie"></i>
+                    </div>
+                    <div class="achievement-title">External Examiner</div>
+                    <div class="achievement-description">
+                        Serving as Observer cum Practical External Examiner in NIELIT Centers, New Delhi since January 2017, contributing to educational quality assurance.
+                    </div>
+                </div>
+                <div class="achievement-card animate-on-scroll">
+                    <div class="achievement-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="achievement-title">Industry-Academia Bridge</div>
+                    <div class="achievement-description">
+                        Successfully bridged industry-academia gap through specialized courses, workshops, and industry-oriented training programs for students.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications Section with Horizontal Scrolling -->
+    <section id="certifications">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Certifications</h2>
+            <div class="certifications-container">
+                <div class="certifications-scroll-wrapper" id="certificationsScroll">
+                    <div class="certifications-grid">
+                        <div class="certification-card animate-on-scroll">
+                            <div class="certification-header">
+                                <div class="certification-title">Big Data Enginneer</div>
+                                <span class="certification-badge">IBM</span>
+                            </div>
+                            <div class="certification-provider">IBM </div>
+                            <div class="certification-date">July 2025</div>
+                            <a href="https://courses.cu.skillsnetwork.site/certificates/4237da8b5ba0443487b128a35a7ea7ed" class="certification-link">
+                                <i class="fas fa-external-link-alt"></i> View Certificate
+                            </a>
+                        </div>
+                        <div class="certification-card animate-on-scroll">
+                            <div class="certification-header">
+                                <div class="certification-title">Generative AI Assistant</div>
+                                <span class="certification-badge">CU</span>
+                            </div>
+                            <div class="certification-provider">Coursera</div>
+                            <div class="certification-date">Octocber 2024</div>
+                            <a href="https://coursera.org/verify/ROD6MSUR0N7Y" class="certification-link">
+                                <i class="fas fa-external-link-alt"></i> View Certificate
+                            </a>
+                        </div>
+                        <div class="certification-card animate-on-scroll">
+                            <div class="certification-header">
+                                <div class="certification-title">ETL and Data Pipelines with Shell Airflow and Kafka </div>
+                                <span class="certification-badge">IBM</span>
+                            </div>
+                            <div class="certification-provider">IBM Coursera</div>
+                            <div class="certification-date">October 2024</div>
+                            <a href="https://coursera.org/verify/KCJ2F2U5X511" class="certification-link">
+                                <i class="fas fa-external-link-alt"></i> View Certificate
+                            </a>
+                        </div>
+                        <div class="certification-card animate-on-scroll">
+                            <div class="certification-header">
+                                <div class="certification-title">Hands-on Introduction to Linux Commands and Shell Scripting</div>
+                                <span class="certification-badge">IBM </span>
+                            </div>
+                            <div class="certification-provider">IBM Coursera</div>
+                            <div class="certification-date">September 2024</div>
+                            <a href="https://coursera.org/verify/XEU245AQJ2WC" class="certification-link">
+                                <i class="fas fa-external-link-alt"></i> View Certificate
+                            </a>
+                        </div>
+                        <div class="certification-card animate-on-scroll">
+                            <div class="certification-header">
+                                <div class="certification-title">Prompt Engineering for ChatGPT</div>
+                                <span class="certification-badge">Vanderbilt University</span>
+                            </div>
+                            <div class="certification-provider">Coursera</div>
+                            <div class="certification-date">September 2024</div>
+                            <a href="https://coursera.org/verify/P2S1CIMV4L4F" class="certification-link">
+                                <i class="fas fa-external-link-alt"></i> View Certificate
+                            </a>
+                        </div>
+                        <div class="certification-card animate-on-scroll">
+                            <div class="certification-header">
+                                <div class="certification-title">Cloud Security</div>
+                                <span class="certification-badge">IBM</span>
+                            </div>
+                            <div class="certification-provider">IBMCE</div>
+                            <div class="certification-date">July 2024</div>
+                            <a href="https://courses.cu.skillsnetwork.site/cefbdb00a384cf664b5e5" class="certification-link">
+                                <i class="fas fa-external-link-alt"></i> View Certificate
+                            </a>
+                        </div>
+                        <div class="certification-card animate-on-scroll">
+                            <div class="certification-header">
+                                <div class="certification-title">Angular JS</div>
+                                <span class="certification-badge">IBM</span>
+                            </div>
+                            <div class="certification-provider">IBM</div>
+                            <div class="certification-date">July 2024</div>
+                            <a href="https://courses.cu.skillsnf2b3081b4748ff4f80" class="certification-link">
+                                <i class="fas fa-external-link-alt"></i> View Certificate
+                            </a>
+                        </div>
+                        <div class="certification-card animate-on-scroll">
+                            <div class="certification-header">
+                                <div class="certification-title">Advance your Skills in Deep Learning and Neural Networks </div>
+                                <span class="certification-badge">Linkedin</span>
+                            </div>
+                            <div class="certification-provider">Linkedin Learning</div>
+                            <div class="certification-date">March 2023</div>
+                            <a href="https://www.linkedin.com/posts/activity-7044741896543346689-zCOt?utm_source=share&utm_medium=member_desktop&rcm=ACoAADhqx3EBlm7E3lYH0eKL_mYQVzxtvCFvlCE" class="certification-link">
+                                <i class="fas fa-external-link-alt"></i> View Certificate
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="scroll-buttons">
+                    <button class="scroll-btn" onclick="scrollPublications('certificationsScroll', 'left')">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="scroll-btn" onclick="scrollPublications('certificationsScroll', 'right')">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <div class="container">
+            <h2 class="section-title animate-on-scroll">Get in Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3 class="animate-on-scroll">Contact Information</h3>
+                    <div class="contact-grid">
+                        <div class="contact-item animate-on-scroll">
+                            <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                            <div class="contact-label">Email</div>
+                            <div class="contact-value">
+                                <a href="mailto:pramod.v1201@gmail.com">pramod.v1201@gmail.com</a>
+                            </div>
+                        </div>
+                        <div class="contact-item animate-on-scroll">
+                            <div class="contact-icon"><i class="fas fa-phone"></i></div>
+                            <div class="contact-label">Phone</div>
+                            <div class="contact-value">+91-8909969650</div>
+                        </div>
+                        <div class="contact-item animate-on-scroll">
+                            <div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                            <div class="contact-label">Location</div>
+                            <div class="contact-value">Gorakhpur, India</div>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="https://scholar.google.com/citations?user=DLqHUf0AAAAJ&hl=en" class="social-icon animate-on-scroll" title="Google Scholar" target="_blank">
+                            <i class="fas fa-graduation-cap"></i>
+                        </a>
+                        <a href="https://www.scopus.com/authid/detail.uri?authorId=57403471100" class="social-icon animate-on-scroll" title="Scopus" target="_blank">
+                            <i class="fas fa-book"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/pramodv1201/" class="social-icon animate-on-scroll" title="LinkedIn" target="_blank">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="mailto:pramod.v1201@gmail.com" class="social-icon animate-on-scroll" title="Email">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Dr. Pramod Vishwakarma. All rights reserved. | <a href="mailto:pramod.v1201@gmail.com">Contact</a></p>
+        </div>
+    </footer>
+
+    <script>
+     // 3D Globe with Enhanced Visual and Mouse Interaction
+        function initGlobe() {
+            const container = document.getElementById('globe-container');
+            if (!container) return;
+            
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setClearColor(0x0A192F, 1);
+            container.appendChild(renderer.domElement);
+            
+            // Create globe with wireframe
+            const globeGeometry = new THREE.SphereGeometry(2.5, 64, 64);
+            const globeMaterial = new THREE.MeshPhongMaterial({
+                color: 0x1E3A5F,
+                emissive: 0x64FFDA,
+                emissiveIntensity: 0.2,
+                shininess: 100,
+                wireframe: false
+            });
+            const globe = new THREE.Mesh(globeGeometry, globeMaterial);
+            scene.add(globe);
+            
+            // Add wireframe overlay
+            const wireframeGeometry = new THREE.SphereGeometry(2.51, 32, 32);
+            const wireframeMaterial = new THREE.MeshBasicMaterial({
+                color: 0x64FFDA,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.15
+            });
+            const wireframe = new THREE.Mesh(wireframeGeometry, wireframeMaterial);
+            scene.add(wireframe);
+            
+            // Add glowing ring
+            const ringGeometry = new THREE.TorusGeometry(3.2, 0.05, 16, 100);
+            const ringMaterial = new THREE.MeshBasicMaterial({
+                color: 0x64FFDA,
+                transparent: true,
+                opacity: 0.6
+            });
+            const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+            ring.rotation.x = Math.PI / 3;
+            scene.add(ring);
+            
+            // Add particles representing research/data points
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particleCount = 2000;
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+            
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                const radius = 2.6 + Math.random() * 4;
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.random() * Math.PI;
+                
+                positions[i] = radius * Math.sin(phi) * Math.cos(theta);
+                positions[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
+                positions[i + 2] = radius * Math.cos(phi);
+                
+                colors[i] = 0.4 + Math.random() * 0.6;
+                colors[i + 1] = 1;
+                colors[i + 2] = 0.85 + Math.random() * 0.15;
+            }
+            
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.04,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending
+            });
+            
+            const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particles);
+            
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0x64FFDA, 0.5);
+            scene.add(ambientLight);
+            
+            const pointLight1 = new THREE.PointLight(0x64FFDA, 1, 100);
+            pointLight1.position.set(5, 5, 5);
+            scene.add(pointLight1);
+            
+            const pointLight2 = new THREE.PointLight(0x00D9B5, 0.8, 100);
+            pointLight2.position.set(-5, -5, 5);
+            scene.add(pointLight2);
+            
+            camera.position.z = 8;
+            
+            // Mouse interaction variables
+            let mouseX = 0;
+            let mouseY = 0;
+            let isMouseDown = false;
+            let previousMouseX = 0;
+            let previousMouseY = 0;
+            
+            // Group all objects to rotate together
+            const globeGroup = new THREE.Group();
+            globeGroup.add(globe);
+            globeGroup.add(wireframe);
+            globeGroup.add(ring);
+            globeGroup.add(particles);
+            scene.add(globeGroup);
+            
+            // Mouse event listeners for interaction
+            container.addEventListener('mousedown', (e) => {
+                isMouseDown = true;
+                previousMouseX = e.clientX;
+                previousMouseY = e.clientY;
+            });
+            
+            container.addEventListener('mouseup', () => {
+                isMouseDown = false;
+            });
+            
+            container.addEventListener('mousemove', (e) => {
+                mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+                mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+                
+                if (isMouseDown) {
+                    const deltaX = e.clientX - previousMouseX;
+                    const deltaY = e.clientY - previousMouseY;
+                    
+                    // Rotate the entire group
+                    globeGroup.rotation.y += deltaX * 0.01;
+                    globeGroup.rotation.x += deltaY * 0.01;
+                    
+                    previousMouseX = e.clientX;
+                    previousMouseY = e.clientY;
+                }
+            });
+            
+            // Animation
+            let time = 0;
+            function animate() {
+                requestAnimationFrame(animate);
+                time += 0.01;
+                
+                if (!isMouseDown) {
+                    globeGroup.rotation.y += 0.003;
+                }
+                
+                // Animate particle positions
+                const positions = particles.geometry.attributes.position.array;
+                for (let i = 0; i < positions.length; i += 3) {
+                    positions[i + 1] += Math.sin(time + i) * 0.001;
+                }
+                particles.geometry.attributes.position.needsUpdate = true;
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            window.addEventListener('resize', () => {
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        }
+
+        // Particle Field Generation
+        function createParticles() {
+            const particleField = document.getElementById('particleField');
+            if (!particleField) return;
+            
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                // Random properties
+                const size = Math.random() * 3 + 1;
+                const left = Math.random() * 100;
+                const animationDuration = Math.random() * 20 + 10;
+                const animationDelay = Math.random() * 20;
+                const opacity = Math.random() * 0.5 + 0.2;
+                
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${left}%`;
+                particle.style.animationDuration = `${animationDuration}s`;
+                particle.style.animationDelay = `${animationDelay}s`;
+                particle.style.opacity = opacity;
+                
+                particleField.appendChild(particle);
+            }
+        }
+
+        // Publications Scrolling
+        function scrollPublications(containerId, direction) {
+            const scrollContainer = document.getElementById(containerId);
+            if (!scrollContainer) return;
+            
+            const scrollAmount = 420;
+            
+            if (direction === 'left') {
+                scrollContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+            } else {
+                scrollContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+            }
+        }
+
+        // Open publication link (placeholder - add actual links later)
+        function openPublication(url) {
+            if (url && url !== '#') {
+                window.open(url, '_blank');
+            } else {
+                console.log('Publication link will be added');
+            }
+        }
+
+        // Mobile Navigation Toggle
+        function initMobileNav() {
+            const mobileNavToggle = document.getElementById('mobileNavToggle');
+            const navLinks = document.getElementById('navLinks');
+            
+            if (mobileNavToggle && navLinks) {
+                mobileNavToggle.addEventListener('click', () => {
+                    navLinks.classList.toggle('active');
+                    mobileNavToggle.innerHTML = navLinks.classList.contains('active') 
+                        ? '<i class="fas fa-times"></i>' 
+                        : '<i class="fas fa-bars"></i>';
+                });
+            }
+            
+            // Close mobile menu when clicking on a link
+            const navLinksItems = document.querySelectorAll('.nav-link');
+            navLinksItems.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (navLinks) {
+                        navLinks.classList.remove('active');
+                        if (mobileNavToggle) {
+                            mobileNavToggle.innerHTML = '<i class="fas fa-bars"></i>';
+                        }
+                    }
+                });
+            });
+        }
+
+        // Navigation Active State
+        const navLinks = document.querySelectorAll('.nav-link');
+        const sections = document.querySelectorAll('section');
+
+        function updateActiveNav() {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href').slice(1) === current) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // Scroll Reveal Animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                } else {
+                    // Reset animation when element leaves viewport
+                    entry.target.classList.remove('visible');
+                }
+            });
+        }, observerOptions);
+
+        // Observe elements for scroll animations
+        document.querySelectorAll('.animate-on-scroll, .skill-category, .publication-card, .education-card, .timeline-item, .achievement-card, .certification-card').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Smooth Scroll
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href').slice(1);
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Initialize
+        window.addEventListener('load', () => {
+            initGlobe();
+            createParticles();
+            initMobileNav();
+            updateActiveNav();
+        });
+
+        window.addEventListener('scroll', updateActiveNav);
+    </script>
+</body>
+</html>
