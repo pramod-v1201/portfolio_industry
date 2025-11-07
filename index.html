@@ -464,15 +464,14 @@ nav {
     display: flex;
     align-items: center;
     justify-content: center;
-    perspective: 1200px;
+    perspective: none; /* Remove this line */
 }
 
-#laptop-container {
+#data-flow-container {
     width: 100%;
     height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: relative;
+    overflow: hidden;
 }
 
 /* Sections */
@@ -1394,7 +1393,7 @@ footer a:hover {
                     </div>
                 </div>
                 <div class="hero-visual">
-                    <div id="laptop-container"></div>
+                  <div id="data-flow-container"></div>
                 </div>
             </div>
         </div>
@@ -1765,6 +1764,16 @@ footer a:hover {
         <div class="container">
             <h2 class="section-title animate-on-scroll">Achievements</h2>
             <div class="achievements-grid">
+                <div class="achievement-card animate-on-scroll" >
+                <div class="achievement-icon">
+                    <i class="fas fa-award"></i>
+                </div>
+                <div class="achievement-title">ANRF-SERB Grant Approved - Cloud Computing Research</div>
+                <div class="achievement-description">
+                    Proposal "Emerging Trends and Best Practices in Cloud Computing"approved for financial assistance under the Anusandhan National Research Foundation (ANRF), Science & Engineering Research Board (SERB), Department of Science & Technology (DST), Govt. of India. 
+                </div>
+            </div>
+                
                 <div class="achievement-card animate-on-scroll">
                     <div class="achievement-icon">
                         <i class="fas fa-trophy"></i>
@@ -1774,15 +1783,7 @@ footer a:hover {
                         Published 25+ research papers in International & National Journals and Conferences, demonstrating significant contribution to the academic community.
                     </div>
                 </div>
-                <div class="achievement-card animate-on-scroll">
-                    <div class="achievement-icon">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <div class="achievement-title">Academic Excellence</div>
-                    <div class="achievement-description">
-                        Secured overall third position in M.Tech. (CSE) program and achieved 'S' Grade (>85%) in C Language and 'A' Grade (>=80% & <85%) in C++ in NIELIT examinations.
-                    </div>
-                </div>
+
                 <div class="achievement-card animate-on-scroll">
                     <div class="achievement-icon">
                         <i class="fas fa-chalkboard-teacher"></i>
@@ -2083,232 +2084,583 @@ footer a:hover {
             rootMargin: '-10% 0px -10% 0px'
         });
 
-        // Create 3D Laptop with Coding Screen
-        function initLaptop() {
-            const container = document.getElementById('laptop-container');
-            if (!container) return;
+// Create Data Flow Animation
+// Create Data Flow Animation
+function initDataFlowAnimation() {
+    const container = document.getElementById('data-flow-container');
+    if (!container) return;
+    
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', '100%');
+    svg.setAttribute('height', '100%');
+    svg.setAttribute('viewBox', '0 0 800 500');
+    svg.setAttribute('preserveAspectRatio', 'xMidYMid meet');
+    svg.style.filter = 'drop-shadow(0 10px 30px rgba(59, 130, 246, 0.3))';
+    container.appendChild(svg);
+    
+    // Define gradients
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    
+    // Gradient for data flow lines
+    const flowGradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    flowGradient.setAttribute('id', 'flowGradient');
+    flowGradient.setAttribute('x1', '0%');
+    flowGradient.setAttribute('x2', '100%');
+    flowGradient.innerHTML = `
+        <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0" />
+        <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#60a5fa;stop-opacity:0" />
+    `;
+    defs.appendChild(flowGradient);
+    
+    // Reverse gradient for right to left flow
+    const flowGradientReverse = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    flowGradientReverse.setAttribute('id', 'flowGradientReverse');
+    flowGradientReverse.setAttribute('x1', '100%');
+    flowGradientReverse.setAttribute('x2', '0%');
+    flowGradientReverse.innerHTML = `
+        <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:0" />
+        <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0" />
+    `;
+    defs.appendChild(flowGradientReverse);
+    
+    // Gradient for charts
+    const chartGradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    chartGradient.setAttribute('id', 'chartGradient');
+    chartGradient.setAttribute('x1', '0%');
+    chartGradient.setAttribute('y1', '0%');
+    chartGradient.setAttribute('x2', '0%');
+    chartGradient.setAttribute('y2', '100%');
+    chartGradient.innerHTML = `
+        <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+        <stop offset="100%" style="stop-color:#1e40af;stop-opacity:0.8" />
+    `;
+    defs.appendChild(chartGradient);
+    
+    svg.appendChild(defs);
+    
+    // Main group for the entire animation
+    const mainGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    svg.appendChild(mainGroup);
+    
+    // 1. Server Racks (Left side) - DATA SOURCE
+    const serverGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    serverGroup.setAttribute('opacity', '0');
+    
+    for (let i = 0; i < 3; i++) {
+        const server = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        server.setAttribute('transform', `translate(50, ${80 + i * 100})`);
+        
+        // Server body
+        const serverBody = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        serverBody.setAttribute('width', '120');
+        serverBody.setAttribute('height', '80');
+        serverBody.setAttribute('rx', '8');
+        serverBody.setAttribute('fill', '#1e293b');
+        serverBody.setAttribute('stroke', '#3b82f6');
+        serverBody.setAttribute('stroke-width', '2');
+        server.appendChild(serverBody);
+        
+        // Server label
+        const serverLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        serverLabel.setAttribute('x', '60');
+        serverLabel.setAttribute('y', '-5');
+        serverLabel.setAttribute('text-anchor', 'middle');
+        serverLabel.setAttribute('fill', '#3b82f6');
+        serverLabel.setAttribute('font-size', '10');
+        serverLabel.setAttribute('font-weight', '600');
+        serverLabel.textContent = 'DATA CENTER';
+        server.appendChild(serverLabel);
+        
+        // Server details (shelves)
+        for (let j = 0; j < 3; j++) {
+            const shelf = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+            shelf.setAttribute('x', '10');
+            shelf.setAttribute('y', `${15 + j * 20}`);
+            shelf.setAttribute('width', '100');
+            shelf.setAttribute('height', '12');
+            shelf.setAttribute('rx', '2');
+            shelf.setAttribute('fill', '#334155');
+            shelf.setAttribute('stroke', '#475569');
+            shelf.setAttribute('stroke-width', '1');
+            server.appendChild(shelf);
             
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.setClearColor(0xffffff, 0);
-            renderer.shadowMap.enabled = true;
-            container.appendChild(renderer.domElement);
-            
-            // Lighting
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-            scene.add(ambientLight);
-            
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight.position.set(5, 10, 7);
-            directionalLight.castShadow = true;
-            scene.add(directionalLight);
-            
-            const pointLight = new THREE.PointLight(0x3b82f6, 0.5, 50);
-            pointLight.position.set(0, 5, 5);
-            scene.add(pointLight);
-            
-            // Laptop Group
-            const laptopGroup = new THREE.Group();
-            
-            // Laptop Base
-            const baseGeometry = new THREE.BoxGeometry(6, 0.3, 4);
-            const baseMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x1f2937,
-                metalness: 0.6,
-                roughness: 0.4
-            });
-            const base = new THREE.Mesh(baseGeometry, baseMaterial);
-            base.castShadow = true;
-            base.receiveShadow = true;
-            laptopGroup.add(base);
-            
-            // Keyboard area
-            const keyboardGeometry = new THREE.BoxGeometry(5, 0.05, 3);
-            const keyboardMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x374151,
-                metalness: 0.3,
-                roughness: 0.7
-            });
-            const keyboard = new THREE.Mesh(keyboardGeometry, keyboardMaterial);
-            keyboard.position.set(0, 0.175, -0.2);
-            laptopGroup.add(keyboard);
-            
-            // Screen back
-            const screenBackGeometry = new THREE.BoxGeometry(6.2, 4, 0.1);
-            const screenBackMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x1f2937,
-                metalness: 0.6,
-                roughness: 0.4
-            });
-            const screenBack = new THREE.Mesh(screenBackGeometry, screenBackMaterial);
-            screenBack.position.set(0, 2.15, -1.95);
-            screenBack.rotation.x = -0.2;
-            screenBack.castShadow = true;
-            laptopGroup.add(screenBack);
-            
-            // Create coding screen with canvas texture
-            const canvas = document.createElement('canvas');
-            canvas.width = 1024;
-            canvas.height = 682;
-            const ctx = canvas.getContext('2d');
-            
-            // Dark code editor background
-            ctx.fillStyle = '#1e293b';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Code content
-            const codeLines = [
-                'import numpy as np',
-                'import tensorflow as tf',
-                'from sklearn.model_selection import train_test_split',
-                '',
-                '# Load and preprocess data',
-                'def load_dataset():',
-                '    data = pd.read_csv("research_data.csv")',
-                '    X = data.drop("target", axis=1)',
-                '    y = data["target"]',
-                '    return train_test_split(X, y, test_size=0.2)',
-                '',
-                '# Build neural network model',
-                'model = tf.keras.Sequential([',
-                '    tf.keras.layers.Dense(128, activation="relu"),',
-                '    tf.keras.layers.Dropout(0.3),',
-                '    tf.keras.layers.Dense(64, activation="relu"),',
-                '    tf.keras.layers.Dense(1, activation="sigmoid")',
-                '])',
-                '',
-                'model.compile(optimizer="adam",',
-                '              loss="binary_crossentropy",',
-                '              metrics=["accuracy"])',
-            ];
-            
-            ctx.font = '18px "Courier New", monospace';
-            let yPos = 40;
-            
-            codeLines.forEach((line, index) => {
-                if (line.startsWith('import') || line.startsWith('from')) {
-                    ctx.fillStyle = '#c792ea';
-                } else if (line.includes('def') || line.includes('return') || line.includes('class')) {
-                    ctx.fillStyle = '#82aaff';
-                } else if (line.includes('#')) {
-                    ctx.fillStyle = '#676e95';
-                } else if (line.includes('"') || line.includes("'")) {
-                    ctx.fillStyle = '#c3e88d';
-                } else {
-                    ctx.fillStyle = '#a6accd';
-                }
-                
-                ctx.fillText(line, 30, yPos);
-                yPos += 30;
-            });
-            
-            // Add cursor
-            ctx.fillStyle = '#3b82f6';
-            ctx.fillRect(30, yPos - 25, 12, 20);
-            
-            const screenTexture = new THREE.CanvasTexture(canvas);
-            screenTexture.needsUpdate = true;
-            
-            const screenGeometry = new THREE.BoxGeometry(5.6, 3.4, 0.05);
-            const screenMaterial = new THREE.MeshStandardMaterial({ 
-                map: screenTexture,
-                emissive: 0x3b82f6,
-                emissiveIntensity: 0.2
-            });
-            const screen = new THREE.Mesh(screenGeometry, screenMaterial);
-            screen.position.set(0, 2.15, -1.9);
-            screen.rotation.x = -0.2;
-            laptopGroup.add(screen);
-            
-            // Add glowing particles around laptop
-            const particlesGeometry = new THREE.BufferGeometry();
-            const particleCount = 100;
-            const positions = new Float32Array(particleCount * 3);
-            const colors = new Float32Array(particleCount * 3);
-            
-            for (let i = 0; i < particleCount * 3; i += 3) {
-                const angle = Math.random() * Math.PI * 2;
-                const radius = 5 + Math.random() * 3;
-                const height = Math.random() * 6 - 2;
-                
-                positions[i] = Math.cos(angle) * radius;
-                positions[i + 1] = height;
-                positions[i + 2] = Math.sin(angle) * radius - 1;
-                
-                colors[i] = 0.15 + Math.random() * 0.4;
-                colors[i + 1] = 0.4 + Math.random() * 0.4;
-                colors[i + 2] = 0.9 + Math.random() * 0.1;
+            // LED indicators
+            for (let k = 0; k < 3; k++) {
+                const led = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                led.setAttribute('cx', `${20 + k * 15}`);
+                led.setAttribute('cy', `${21 + j * 20}`);
+                led.setAttribute('r', '3');
+                led.setAttribute('fill', k === 0 ? '#22c55e' : '#3b82f6');
+                led.setAttribute('class', 'led-blink');
+                server.appendChild(led);
             }
-            
-            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-            
-            const particlesMaterial = new THREE.PointsMaterial({
-                size: 0.1,
-                vertexColors: true,
-                transparent: true,
-                opacity: 0.6,
-                blending: THREE.AdditiveBlending
-            });
-            
-            const particles = new THREE.Points(particlesGeometry, particlesMaterial);
-            laptopGroup.add(particles);
-            
-            scene.add(laptopGroup);
-            laptopGroup.rotation.x = 0.3;
-            
-            camera.position.set(0, 3, 10);
-            camera.lookAt(0, 1, 0);
-            
-            // Mouse interaction
-            let mouseX = 0;
-            let mouseY = 0;
-            
-            document.addEventListener('mousemove', (e) => {
-                mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-                mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-            });
-            
-            // Animation
-            let time = 0;
-            function animate() {
-                requestAnimationFrame(animate);
-                time += 0.01;
-                
-                laptopGroup.rotation.y = mouseX * 0.3;
-                laptopGroup.rotation.x = 0.3 + mouseY * 0.1;
-                
-                // Animate particles
-                const positions = particles.geometry.attributes.position.array;
-                for (let i = 0; i < positions.length; i += 3) {
-                    positions[i + 1] += Math.sin(time + i) * 0.01;
-                }
-                particles.geometry.attributes.position.needsUpdate = true;
-                
-                // Update cursor animation
-                if (Math.floor(time * 2) % 2 === 0) {
-                    ctx.fillStyle = '#1e293b';
-                    ctx.fillRect(30, yPos - 25, 12, 20);
-                } else {
-                    ctx.fillStyle = '#3b82f6';
-                    ctx.fillRect(30, yPos - 25, 12, 20);
-                }
-                screenTexture.needsUpdate = true;
-                
-                renderer.render(scene, camera);
-            }
-            
-            animate();
-            
-            window.addEventListener('resize', () => {
-                camera.aspect = container.clientWidth / container.clientHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(container.clientWidth, container.clientHeight);
-            });
         }
+        
+        serverGroup.appendChild(server);
+    }
+    
+    // 2. Data Flow Lines - FROM LEFT TO RIGHT
+    const flowLinesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    flowLinesGroup.setAttribute('opacity', '0');
+    
+    // Flow paths from servers to charts (left to middle)
+    const serverToChartPaths = [
+        { path: 'M 170 120 Q 250 120 310 180', color: 'url(#flowGradient)' },
+        { path: 'M 170 180 Q 250 180 310 220', color: 'url(#flowGradient)' },
+        { path: 'M 170 220 Q 250 220 310 260', color: 'url(#flowGradient)' },
+        { path: 'M 170 280 Q 250 280 310 320', color: 'url(#flowGradient)' }
+    ];
+    
+    serverToChartPaths.forEach((pathData, index) => {
+        const flowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        flowPath.setAttribute('d', pathData.path);
+        flowPath.setAttribute('stroke', pathData.color);
+        flowPath.setAttribute('stroke-width', '2.5');
+        flowPath.setAttribute('fill', 'none');
+        flowPath.setAttribute('stroke-dasharray', '8 4');
+        flowPath.setAttribute('class', 'flow-line');
+        flowPath.style.animation = `flowAnimation 2.5s linear infinite`;
+        flowPath.style.animationDelay = `${index * 0.2}s`;
+        flowLinesGroup.appendChild(flowPath);
+        
+        // Add flowing particles
+        const particle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        particle.setAttribute('r', '3');
+        particle.setAttribute('fill', '#60a5fa');
+        particle.setAttribute('class', 'flow-particle');
+        particle.style.offsetPath = `path('${pathData.path}')`;
+        particle.style.animation = `particleFlow 2.5s linear infinite`;
+        particle.style.animationDelay = `${index * 0.2}s`;
+        flowLinesGroup.appendChild(particle);
+    });
+    
+    // Flow paths from charts to dashboard (middle to right)
+    const chartToDashboardPaths = [
+        { path: 'M 500 200 Q 540 200 580 180', color: 'url(#flowGradient)' },
+        { path: 'M 500 240 Q 540 240 580 240', color: 'url(#flowGradient)' },
+        { path: 'M 490 320 Q 535 310 580 300', color: 'url(#flowGradient)' }
+    ];
+    
+    chartToDashboardPaths.forEach((pathData, index) => {
+        const flowPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        flowPath.setAttribute('d', pathData.path);
+        flowPath.setAttribute('stroke', pathData.color);
+        flowPath.setAttribute('stroke-width', '2.5');
+        flowPath.setAttribute('fill', 'none');
+        flowPath.setAttribute('stroke-dasharray', '8 4');
+        flowPath.setAttribute('class', 'flow-line');
+        flowPath.style.animation = `flowAnimation 2.5s linear infinite`;
+        flowPath.style.animationDelay = `${0.8 + index * 0.2}s`;
+        flowLinesGroup.appendChild(flowPath);
+        
+        // Add flowing particles
+        const particle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        particle.setAttribute('r', '3');
+        particle.setAttribute('fill', '#60a5fa');
+        particle.setAttribute('class', 'flow-particle');
+        particle.style.offsetPath = `path('${pathData.path}')`;
+        particle.style.animation = `particleFlow 2.5s linear infinite`;
+        particle.style.animationDelay = `${0.8 + index * 0.2}s`;
+        flowLinesGroup.appendChild(particle);
+    });
+    
+    // 3. Charts (Middle) - ANALYTICS
+    const chartsGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    chartsGroup.setAttribute('opacity', '0');
+    
+    // Analytics label
+    const analyticsLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    analyticsLabel.setAttribute('x', '410');
+    analyticsLabel.setAttribute('y', '120');
+    analyticsLabel.setAttribute('text-anchor', 'middle');
+    analyticsLabel.setAttribute('fill', '#3b82f6');
+    analyticsLabel.setAttribute('font-size', '12');
+    analyticsLabel.setAttribute('font-weight', '700');
+    analyticsLabel.textContent = 'ANALYTICS ENGINE';
+    chartsGroup.appendChild(analyticsLabel);
+    
+    // Bar Chart with container
+    const barChartContainer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    barChartContainer.setAttribute('transform', 'translate(320, 145)');
+    
+    // Bar chart background
+    const barChartBg = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    barChartBg.setAttribute('x', '-10');
+    barChartBg.setAttribute('y', '-10');
+    barChartBg.setAttribute('width', '150');
+    barChartBg.setAttribute('height', '110');
+    barChartBg.setAttribute('rx', '8');
+    barChartBg.setAttribute('fill', '#1e293b');
+    barChartBg.setAttribute('stroke', '#3b82f6');
+    barChartBg.setAttribute('stroke-width', '1.5');
+    barChartBg.setAttribute('opacity', '0.5');
+    barChartContainer.appendChild(barChartBg);
+    
+    const barHeights = [50, 65, 45, 70, 55];
+    const barColors = ['#3b82f6', '#60a5fa', '#2563eb', '#3b82f6', '#1e40af'];
+    
+    barHeights.forEach((height, i) => {
+        const bar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        bar.setAttribute('x', `${10 + i * 23}`);
+        bar.setAttribute('y', `${80 - height}`);
+        bar.setAttribute('width', '16');
+        bar.setAttribute('height', '0');
+        bar.setAttribute('rx', '3');
+        bar.setAttribute('fill', barColors[i]);
+        bar.setAttribute('class', 'animated-bar');
+        bar.style.animation = `barGrow 1s ease-out forwards`;
+        bar.style.animationDelay = `${1.5 + i * 0.1}s`;
+        bar.dataset.finalHeight = height;
+        barChartContainer.appendChild(bar);
+    });
+    
+    chartsGroup.appendChild(barChartContainer);
+    
+    // Pie Chart with container
+    const pieChartContainer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    pieChartContainer.setAttribute('transform', 'translate(410, 320)');
+    
+    // Pie chart background
+    const pieChartBg = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    pieChartBg.setAttribute('cx', '0');
+    pieChartBg.setAttribute('cy', '0');
+    pieChartBg.setAttribute('r', '65');
+    pieChartBg.setAttribute('fill', '#1e293b');
+    pieChartBg.setAttribute('stroke', '#3b82f6');
+    pieChartBg.setAttribute('stroke-width', '1.5');
+    pieChartBg.setAttribute('opacity', '0.5');
+    pieChartContainer.appendChild(pieChartBg);
+    
+    const pieData = [
+        { percentage: 35, color: '#3b82f6', startAngle: 0 },
+        { percentage: 25, color: '#60a5fa', startAngle: 126 },
+        { percentage: 20, color: '#2563eb', startAngle: 216 },
+        { percentage: 20, color: '#1e40af', startAngle: 288 }
+    ];
+    
+    pieData.forEach((slice, i) => {
+        const angle = (slice.percentage / 100) * 360;
+        const largeArc = angle > 180 ? 1 : 0;
+        
+        const x1 = 50 * Math.cos((slice.startAngle * Math.PI) / 180);
+        const y1 = 50 * Math.sin((slice.startAngle * Math.PI) / 180);
+        const x2 = 50 * Math.cos(((slice.startAngle + angle) * Math.PI) / 180);
+        const y2 = 50 * Math.sin(((slice.startAngle + angle) * Math.PI) / 180);
+        
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', `M 0 0 L ${x1} ${y1} A 50 50 0 ${largeArc} 1 ${x2} ${y2} Z`);
+        path.setAttribute('fill', slice.color);
+        path.setAttribute('stroke', '#1e293b');
+        path.setAttribute('stroke-width', '2');
+        path.setAttribute('class', 'pie-slice');
+        path.style.transformOrigin = 'center';
+        path.style.animation = `pieGrow 0.8s ease-out forwards`;
+        path.style.animationDelay = `${2 + i * 0.15}s`;
+        pieChartContainer.appendChild(path);
+    });
+    
+    chartsGroup.appendChild(pieChartContainer);
+    
+    // 4. Dashboard Screen (Right) - VISUALIZATION
+    const dashboardGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    dashboardGroup.setAttribute('opacity', '0');
+    dashboardGroup.setAttribute('transform', 'translate(580, 100)');
+    
+    // Dashboard label
+    const dashboardLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    dashboardLabel.setAttribute('x', '90');
+    dashboardLabel.setAttribute('y', '-10');
+    dashboardLabel.setAttribute('text-anchor', 'middle');
+    dashboardLabel.setAttribute('fill', '#3b82f6');
+    dashboardLabel.setAttribute('font-size', '10');
+    dashboardLabel.setAttribute('font-weight', '600');
+    dashboardLabel.textContent = 'DASHBOARD';
+    dashboardGroup.appendChild(dashboardLabel);
+    
+    // Screen frame
+    const screen = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    screen.setAttribute('width', '180');
+    screen.setAttribute('height', '280');
+    screen.setAttribute('rx', '12');
+    screen.setAttribute('fill', '#1e293b');
+    screen.setAttribute('stroke', '#3b82f6');
+    screen.setAttribute('stroke-width', '3');
+    dashboardGroup.appendChild(screen);
+    
+    // Screen inner glow
+    const screenGlow = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    screenGlow.setAttribute('x', '5');
+    screenGlow.setAttribute('y', '5');
+    screenGlow.setAttribute('width', '170');
+    screenGlow.setAttribute('height', '270');
+    screenGlow.setAttribute('rx', '8');
+    screenGlow.setAttribute('fill', 'none');
+    screenGlow.setAttribute('stroke', '#3b82f6');
+    screenGlow.setAttribute('stroke-width', '1');
+    screenGlow.setAttribute('opacity', '0.3');
+    dashboardGroup.appendChild(screenGlow);
+    
+    // Screen content - Line graph (FLIPPED TO LEFT)
+    const graphPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    graphPath.setAttribute('d', 'M 160 200 Q 130 150 100 180 T 40 160');
+    graphPath.setAttribute('stroke', '#60a5fa');
+    graphPath.setAttribute('stroke-width', '3');
+    graphPath.setAttribute('fill', 'none');
+    graphPath.setAttribute('stroke-dasharray', '200');
+    graphPath.setAttribute('stroke-dashoffset', '200');
+    graphPath.setAttribute('class', 'graph-line');
+    graphPath.style.animation = `drawLine 2s ease-out forwards`;
+    graphPath.style.animationDelay = '0.5s';
+    dashboardGroup.appendChild(graphPath);
+    
+    // Gradient fill under line graph
+    const graphFill = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    graphFill.setAttribute('d', 'M 160 200 Q 130 150 100 180 T 40 160 L 40 250 L 160 250 Z');
+    graphFill.setAttribute('fill', 'url(#chartGradient)');
+    graphFill.setAttribute('opacity', '0');
+    graphFill.setAttribute('class', 'graph-fill');
+    graphFill.style.animation = 'fadeIn 1s ease-out forwards';
+    graphFill.style.animationDelay = '1.5s';
+    dashboardGroup.appendChild(graphFill);
+    
+    // CORRECTED: Fix data point animations
+    const dataPoints = [[160, 200], [100, 180], [40, 160]];
+    dataPoints.forEach((point, i) => {
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        circle.setAttribute('cx', point[0]);
+        circle.setAttribute('cy', point[1]);
+        circle.setAttribute('r', '0');
+        circle.setAttribute('fill', '#60a5fa');
+        circle.setAttribute('stroke', '#3b82f6');
+        circle.setAttribute('stroke-width', '2');
+        circle.setAttribute('class', 'data-point');
+        circle.style.animation = 'pointPop 0.5s ease-out forwards';
+        circle.style.animationDelay = `${2.5 + i * 0.2}s`;
+        dashboardGroup.appendChild(circle);
+        
+        // Add pulsing ring around data points
+        const ring = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        ring.setAttribute('cx', point[0]);
+        ring.setAttribute('cy', point[1]);
+        ring.setAttribute('r', '5');
+        ring.setAttribute('fill', 'none');
+        ring.setAttribute('stroke', '#60a5fa');
+        ring.setAttribute('stroke-width', '2');
+        ring.setAttribute('class', 'data-point-ring');
+        ring.style.animation = 'ringPulse 2s ease-out infinite';
+        ring.style.animationDelay = `${3 + i * 0.2}s`;
+        dashboardGroup.appendChild(ring);
+    });
+    
+    // Dashboard mini bars at bottom
+    const miniBarsContainer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    miniBarsContainer.setAttribute('transform', 'translate(0, 10)');
+    
+    for (let i = 0; i < 6; i++) {
+        const miniBarHeight = 15 + Math.random() * 25;
+        const miniBar = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        miniBar.setAttribute('x', `${25 + i * 23}`);
+        miniBar.setAttribute('y', `${255 - miniBarHeight}`);
+        miniBar.setAttribute('width', '14');
+        miniBar.setAttribute('height', '0');
+        miniBar.setAttribute('rx', '2');
+        miniBar.setAttribute('fill', i % 2 === 0 ? '#3b82f6' : '#60a5fa');
+        miniBar.setAttribute('class', 'mini-bar');
+        miniBar.style.animation = `barGrow 0.8s ease-out forwards`;
+        miniBar.style.animationDelay = `${3.5 + i * 0.1}s`;
+        miniBar.dataset.finalHeight = miniBarHeight;
+        miniBarsContainer.appendChild(miniBar);
+    }
+    
+    dashboardGroup.appendChild(miniBarsContainer);
+    
+    // Status indicators
+    const statusIndicators = [
+        { x: 20, y: 25, color: '#22c55e', label: 'ONLINE' },
+        { x: 90, y: 25, color: '#3b82f6', label: 'ACTIVE' },
+        { x: 150, y: 25, color: '#60a5fa', label: 'SYNC' }
+    ];
+    
+    statusIndicators.forEach((indicator, i) => {
+        const statusCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        statusCircle.setAttribute('cx', indicator.x);
+        statusCircle.setAttribute('cy', indicator.y);
+        statusCircle.setAttribute('r', '4');
+        statusCircle.setAttribute('fill', indicator.color);
+        statusCircle.setAttribute('class', 'status-indicator');
+        statusCircle.style.animation = `statusBlink 2s ease-in-out infinite`;
+        statusCircle.style.animationDelay = `${4 + i * 0.3}s`;
+        dashboardGroup.appendChild(statusCircle);
+    });
+    
+    // 5. Floating Data Particles
+    const particlesGroup = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    particlesGroup.setAttribute('opacity', '0.4');
+    
+    for (let i = 0; i < 30; i++) {
+        const particle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        particle.setAttribute('cx', Math.random() * 800);
+        particle.setAttribute('cy', Math.random() * 500);
+        particle.setAttribute('r', Math.random() * 2.5 + 0.5);
+        particle.setAttribute('fill', Math.random() > 0.5 ? '#3b82f6' : '#60a5fa');
+        particle.setAttribute('class', 'floating-particle');
+        particle.style.animation = `floatParticle ${6 + Math.random() * 6}s ease-in-out infinite`;
+        particle.style.animationDelay = `${Math.random() * 4}s`;
+        particlesGroup.appendChild(particle);
+    }
+    
+    // IMPORTANT: Add elements in render order
+    mainGroup.appendChild(particlesGroup);  // Background particles
+    mainGroup.appendChild(flowLinesGroup);  // Flow lines (behind everything)
+    mainGroup.appendChild(serverGroup);     // Servers (left side - datacenter)
+    mainGroup.appendChild(chartsGroup);     // Charts (middle)
+    mainGroup.appendChild(dashboardGroup);  // Dashboard (right side)
+    
+    // Sequential Animation Function
+    function playSequentialAnimation() {
+        // Reset all opacities and remove transitions
+        dashboardGroup.setAttribute('opacity', '0');
+        chartsGroup.setAttribute('opacity', '0');
+        serverGroup.setAttribute('opacity', '0');
+        flowLinesGroup.setAttribute('opacity', '0');
+        
+        dashboardGroup.style.transition = '';
+        chartsGroup.style.transition = '';
+        serverGroup.style.transition = '';
+        flowLinesGroup.style.transition = '';
+        
+        // Force reflow to reset animations
+        void dashboardGroup.offsetWidth;
+        
+        // 1. Servers (Data Center) appear first - LEFT SIDE
+        setTimeout(() => {
+            serverGroup.style.transition = 'opacity 1s ease-out';
+            serverGroup.setAttribute('opacity', '1');
+        }, 300);
+        
+        // 2. Flow lines start appearing - SHOWING DATA FLOW
+        setTimeout(() => {
+            flowLinesGroup.style.transition = 'opacity 1s ease-out';
+            flowLinesGroup.setAttribute('opacity', '1');
+        }, 1000);
+        
+        // 3. Charts appear second - MIDDLE (Analytics)
+        setTimeout(() => {
+            chartsGroup.style.transition = 'opacity 1s ease-out';
+            chartsGroup.setAttribute('opacity', '1');
+        }, 1800);
+        
+        // 4. Dashboard appears last - RIGHT SIDE (Visualization)
+        setTimeout(() => {
+            dashboardGroup.style.transition = 'opacity 1s ease-out';
+            dashboardGroup.setAttribute('opacity', '1');
+        }, 2800);
+    }
+    
+    // Play animation initially
+    playSequentialAnimation();
+    
+    // Store the animation function globally for replay
+    window.replayDataFlowAnimation = playSequentialAnimation;
+    
+    // Add CSS animations
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes flowAnimation {
+            to { stroke-dashoffset: -12; }
+        }
+        
+        @keyframes particleFlow {
+            0% { offset-distance: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { offset-distance: 100%; opacity: 0; }
+        }
+        
+        @keyframes barGrow {
+            to { height: attr(data-final-height px); }
+        }
+        
+        @keyframes pieGrow {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        
+        @keyframes drawLine {
+            to { stroke-dashoffset: 0; }
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 0.3; }
+        }
+        
+        @keyframes pointPop {
+            0% { r: 0; }
+            50% { r: 8; }
+            100% { r: 5; }
+        }
+        
+        @keyframes ringPulse {
+            0% { r: 5; opacity: 1; }
+            100% { r: 15; opacity: 0; }
+        }
+        
+        @keyframes floatParticle {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0.4; }
+            50% { transform: translateY(-30px) translateX(15px); opacity: 1; }
+        }
+        
+        @keyframes statusBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+        
+        .led-blink {
+            animation: ledBlink 2s ease-in-out infinite;
+        }
+        
+        @keyframes ledBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        
+        .animated-bar {
+            transition: height 0.3s ease;
+        }
+        
+        .animated-bar:hover {
+            opacity: 0.8;
+            transform: scaleY(1.1);
+            transform-origin: bottom;
+        }
+        
+        .pie-slice:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+        
+        .data-point {
+            cursor: pointer;
+        }
+        
+        .data-point:hover {
+            r: 7;
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Add proper height calculation for bars
+    setTimeout(() => {
+        document.querySelectorAll('.animated-bar, .mini-bar').forEach(bar => {
+            const finalHeight = bar.dataset.finalHeight;
+            if (finalHeight) {
+                bar.setAttribute('height', finalHeight);
+            }
+        });
+    }, 100);
+}
 
         function createParticles() {
             const particleField = document.getElementById('particleField');
@@ -2437,22 +2789,42 @@ footer a:hover {
             });
         });
 
-        window.addEventListener('load', () => {
-            createPolygonBackground();
-            initAllSectionPolygons();
-            initLaptop();
-            createParticles();
-            initMobileNav();
-            updateActiveNav();
-            
-            // Trigger initial animation for visible sections
-            document.querySelectorAll('section').forEach(section => {
-                const rect = section.getBoundingClientRect();
-                if (rect.top < window.innerHeight && rect.bottom > 0) {
-                    triggerPolygonAnimation(section);
-                }
-            });
+window.addEventListener('load', () => {
+    createPolygonBackground();
+    initAllSectionPolygons();
+    initDataFlowAnimation();
+    createParticles();
+    initMobileNav();
+    updateActiveNav();
+    
+    // Trigger initial animation for visible sections
+    document.querySelectorAll('section').forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+            triggerPolygonAnimation(section);
+        }
+    });
+    
+    // Setup hero section animation replay - replays when user scrolls back to hero
+    const heroObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && window.replayDataFlowAnimation) {
+                // Small delay to ensure smooth replay
+                setTimeout(() => {
+                    window.replayDataFlowAnimation();
+                }, 100);
+            }
         });
+    }, {
+        threshold: 0.4,  // Trigger when 40% of hero section is visible
+        rootMargin: '0px'
+    });
+    
+    const heroSection = document.getElementById('home');
+    if (heroSection) {
+        heroObserver.observe(heroSection);
+    }
+});
 
         // Recreate polygons on window resize
         window.addEventListener('resize', () => {
